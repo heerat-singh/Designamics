@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { writeClient } from '@/sanity/lib/client'
+import { writeClient } from '@sanity/lib/client'
 
 const INSTAGRAM_GRAPH_URL = 'https://graph.instagram.com'
 
