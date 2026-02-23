@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { writeClient } from '@sanity/lib/client'
+import { getWriteClient } from '@sanity/lib/writeClient'
 
 const INSTAGRAM_GRAPH_URL = 'https://graph.instagram.com'
 
@@ -58,13 +58,13 @@ export async function GET(request: Request) {
     const tokenField = brand === 'designamics' ? 'designamicsToken' : 'cityBuildersToken'
     const expiresField = brand === 'designamics' ? 'designamicsTokenExpiresAt' : 'cityBuildersTokenExpiresAt'
 
-    await writeClient.createIfNotExists({
+    await getWriteClient().createIfNotExists({
       _id: 'instagramConfig',
       _type: 'instagramConfig',
       syncEnabled: true,
     })
 
-    await writeClient.patch('instagramConfig').set({
+    await getWriteClient().patch('instagramConfig').set({
       [tokenField]: longLived.access_token,
       [expiresField]: expiresAt,
     }).commit()

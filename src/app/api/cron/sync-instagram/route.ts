@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { writeClient } from '@sanity/lib/client'
+import { getWriteClient } from '@sanity/lib/writeClient'
 import { groq } from 'next-sanity'
 
 const INSTAGRAM_GRAPH_URL = 'https://graph.instagram.com'
@@ -31,7 +31,7 @@ export async function GET(request: Request) {
 
   try {
     // Fetch instagramConfig from Sanity
-    const config = await writeClient.fetch(groq`
+    const config = await getWriteClient().fetch(groq`
       *[_type == "instagramConfig"][0] {
         syncEnabled,
         designamicsToken,
@@ -104,7 +104,7 @@ export async function GET(request: Request) {
             const docId = `instagram-${post.id}`
 
             // Check if already exists
-            const existing = await writeClient.fetch(
+            const existing = await getWriteClient().fetch(
               groq`*[_id == $id][0]{ _id }`,
               { id: docId }
             )
@@ -122,7 +122,7 @@ export async function GET(request: Request) {
             }
 
             const imageBuffer = Buffer.from(await imageRes.arrayBuffer())
-            const imageAsset = await writeClient.assets.upload('image', imageBuffer, {
+            const imageAsset = await getWriteClient().assets.upload('image', imageBuffer, {
               filename: `instagram-${post.id}.jpg`,
             })
 
@@ -130,7 +130,7 @@ export async function GET(request: Request) {
             const title = extractTitle(post.caption, account.brand)
 
             // Create project document
-            await writeClient.createIfNotExists({
+            await getWriteClient().createIfNotExists({
               _id: docId,
               _type: 'project',
               title,
@@ -199,7 +199,7 @@ async function maybeRefreshToken(account: AccountConfig) {
     const data = await res.json()
     const newExpiresAt = new Date(Date.now() + data.expires_in * 1000).toISOString()
 
-    await writeClient.patch('instagramConfig').set({
+    await getWriteClient().patch('instagramConfig').set({
       [account.tokenField]: data.access_token,
       [account.expiresField]: newExpiresAt,
     }).commit()
