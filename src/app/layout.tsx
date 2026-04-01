@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { clashDisplay, instrumentSerif, generalSans } from '@/styles/fonts'
+import { clashDisplay, generalSans } from '@/styles/fonts'
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from '@/lib/constants'
 import './globals.css'
 
@@ -44,7 +44,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${clashDisplay.variable} ${instrumentSerif.variable} ${generalSans.variable}`}
+      className={`${clashDisplay.variable} ${generalSans.variable}`}
     >
       <body className="antialiased">{children}</body>
     </html>

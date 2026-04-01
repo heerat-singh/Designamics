@@ -1,5 +1,4 @@
 import localFont from 'next/font/local'
-import { Instrument_Serif } from 'next/font/google'
 
 export const clashDisplay = localFont({
   src: [
@@ -20,14 +19,6 @@ export const clashDisplay = localFont({
     },
   ],
   variable: '--font-clash-display',
-  display: 'swap',
-})
-
-export const instrumentSerif = Instrument_Serif({
-  weight: '400',
-  subsets: ['latin'],
-  style: ['normal', 'italic'],
-  variable: '--font-instrument-serif',
   display: 'swap',
 })
 

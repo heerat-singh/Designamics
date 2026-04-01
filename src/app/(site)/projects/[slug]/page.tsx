@@ -188,6 +188,36 @@ export default async function ProjectDetailPage({ params }: Props) {
         </section>
       )}
 
+      {project.videos && project.videos.length > 0 && (
+        <section className="py-[var(--section-padding)]">
+          <Container wide>
+            <h2 className="font-display text-2xl font-semibold mb-8 text-center">Project Videos</h2>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {project.videos.map((video, index) => (
+                <ScrollReveal key={video._key || video.url || index} delay={index * 0.05}>
+                  <figure className="rounded-lg overflow-hidden border border-border bg-black">
+                    <video
+                      className="w-full aspect-video"
+                      controls
+                      preload="metadata"
+                      poster={video.poster?.asset ? urlFor(video.poster).width(1200).url() : undefined}
+                    >
+                      <source src={video.url} />
+                      Your browser does not support the video tag.
+                    </video>
+                    {video.caption && (
+                      <figcaption className="px-4 py-3 text-sm text-muted bg-background">
+                        {video.caption}
+                      </figcaption>
+                    )}
+                  </figure>
+                </ScrollReveal>
+              ))}
+            </div>
+          </Container>
+        </section>
+      )}
+
       {/* Before & After */}
       {project.beforeAfter && project.beforeAfter.length > 0 && (
         <section className="py-[var(--section-padding)]">

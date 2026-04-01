@@ -53,11 +53,13 @@ function Counter({ value, suffix = '' }: { value: number; suffix?: string }) {
 }
 
 export function StatsCounter({ stats = DEFAULT_STATS }: StatsCounterProps) {
+  const safeStats = stats && stats.length > 0 ? stats : DEFAULT_STATS
+
   return (
     <section className="py-[var(--section-padding)] bg-foreground text-background">
       <Container>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
-          {stats.map((stat, index) => (
+          {safeStats.map((stat, index) => (
             <motion.div
               key={stat.label}
               initial={{ opacity: 0, y: 20 }}

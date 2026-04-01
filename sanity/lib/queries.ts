@@ -22,7 +22,7 @@ export const homepageQuery = groq`
     heroImage,
     designamicsIntro,
     cityBuildersIntro,
-    featuredProjects[]-> {
+    "featuredProjects": coalesce(featuredProjects[]-> {
       _id,
       title,
       slug,
@@ -32,8 +32,8 @@ export const homepageQuery = groq`
       coverImage,
       location,
       year
-    },
-    stats,
+    }, []),
+    "stats": coalesce(stats, []),
     ctaHeadline,
     ctaDescription
   }
@@ -101,6 +101,13 @@ export const projectBySlugQuery = groq`
     duration,
     coverImage,
     gallery,
+    videos[]{
+      _key,
+      caption,
+      poster,
+      "url": video.asset->url,
+      "filename": video.asset->originalFilename
+    },
     beforeAfter,
     isFeatured,
     seo

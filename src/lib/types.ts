@@ -31,6 +31,14 @@ export interface SanityImage {
   caption?: string
 }
 
+export interface ProjectVideo {
+  _key?: string
+  caption?: string
+  poster?: SanityImage
+  url: string
+  filename?: string
+}
+
 export interface Project {
   _id: string
   _type: 'project'
@@ -48,6 +56,7 @@ export interface Project {
   duration?: string
   coverImage: SanityImage
   gallery?: SanityImage[]
+  videos?: ProjectVideo[]
   beforeAfter?: {
     before: SanityImage
     after: SanityImage
