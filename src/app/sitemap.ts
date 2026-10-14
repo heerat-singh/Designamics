@@ -59,14 +59,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ]
 
   const projectPages: MetadataRoute.Sitemap = (data?.projects || []).map((p) => ({
-    url: `${SITE_URL}/projects/${p.slug}`,
+    url: `${SITE_URL}/projects/${encodeURIComponent(p.slug)}`,
     lastModified: new Date(p._updatedAt),
     changeFrequency: 'monthly' as const,
     priority: 0.7,
   }))
 
   const servicePages: MetadataRoute.Sitemap = (data?.services || []).map((s) => ({
-    url: `${SITE_URL}/services/${s.slug}`,
+    url: `${SITE_URL}/services/${encodeURIComponent(s.slug)}`,
     lastModified: new Date(s._updatedAt),
     changeFrequency: 'monthly' as const,
     priority: 0.6,

@@ -8,7 +8,7 @@ import { Container, Badge, Button } from '@/components/ui'
 import { SanityImage, PortableTextRenderer, BrandIndicator, JsonLd } from '@/components/shared'
 import { ScrollReveal, FadeIn } from '@/components/motion'
 import { ProjectCard } from '@/components/sections/ProjectCard'
-import { getBrandLabel } from '@/lib/utils'
+import { decodeSlug, getBrandLabel } from '@/lib/utils'
 import { SITE_URL } from '@/lib/constants'
 import type { Project } from '@/lib/types'
 
@@ -25,7 +25,7 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params
+  const slug = decodeSlug((await params).slug)
   const project = await sanityFetch<Project | null>({
     query: projectBySlugQuery,
     params: { slug },
@@ -50,7 +50,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ProjectDetailPage({ params }: Props) {
-  const { slug } = await params
+  const slug = decodeSlug((await params).slug)
   const project = await sanityFetch<Project | null>({
     query: projectBySlugQuery,
     params: { slug },
@@ -70,7 +70,7 @@ export default async function ProjectDetailPage({ params }: Props) {
     '@type': 'CreativeWork',
     name: project.title,
     description: project.tagline,
-    url: `${SITE_URL}/projects/${slug}`,
+    url: `${SITE_URL}/projects/${encodeURIComponent(slug)}`,
     image: project.coverImage?.asset
       ? urlFor(project.coverImage).width(1200).url()
       : undefined,

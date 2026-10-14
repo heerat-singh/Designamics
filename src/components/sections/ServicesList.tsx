@@ -35,7 +35,7 @@ export function ServicesList({
               {designamicsServices.map((service, i) => (
                 <ScrollReveal key={service._id} delay={i * 0.1}>
                   <Link
-                    href={`/services/${service.slug.current}`}
+                    href={`/services/${encodeURIComponent(service.slug.current)}`}
                     className="group block p-5 rounded-lg bg-designamics-bg/50 hover:bg-designamics-bg transition-colors"
                   >
                     <div className="flex items-start justify-between gap-4">
@@ -63,7 +63,7 @@ export function ServicesList({
               {cityBuildersServices.map((service, i) => (
                 <ScrollReveal key={service._id} delay={i * 0.1}>
                   <Link
-                    href={`/services/${service.slug.current}`}
+                    href={`/services/${encodeURIComponent(service.slug.current)}`}
                     className="group block p-5 rounded-lg bg-citybuilders-bg/50 hover:bg-citybuilders-bg transition-colors"
                   >
                     <div className="flex items-start justify-between gap-4">

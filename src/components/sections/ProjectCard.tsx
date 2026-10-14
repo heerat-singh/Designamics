@@ -13,7 +13,7 @@ interface ProjectCardProps {
 
 export function ProjectCard({ project }: ProjectCardProps) {
   return (
-    <Link href={`/projects/${project.slug.current}`}>
+    <Link href={`/projects/${encodeURIComponent(project.slug.current)}`}>
       <motion.article
         whileHover={{ y: -4 }}
         transition={{ duration: 0.3 }}

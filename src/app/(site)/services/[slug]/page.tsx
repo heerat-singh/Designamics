@@ -6,7 +6,7 @@ import { urlFor } from '@sanity/lib/image'
 import { Container, Badge, Button } from '@/components/ui'
 import { SanityImage, PortableTextRenderer } from '@/components/shared'
 import { FadeIn, ScrollReveal } from '@/components/motion'
-import { getBrandLabel } from '@/lib/utils'
+import { decodeSlug, getBrandLabel } from '@/lib/utils'
 import type { Service } from '@/lib/types'
 
 interface Props {
@@ -22,7 +22,7 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params
+  const slug = decodeSlug((await params).slug)
   const service = await sanityFetch<Service | null>({
     query: serviceBySlugQuery,
     params: { slug },
@@ -45,7 +45,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ServiceDetailPage({ params }: Props) {
-  const { slug } = await params
+  const slug = decodeSlug((await params).slug)
   const service = await sanityFetch<Service | null>({
     query: serviceBySlugQuery,
     params: { slug },

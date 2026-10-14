@@ -5,6 +5,15 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+// Route params arrive URL-encoded (e.g. "600%20sq%20yds"), but Sanity stores the raw slug.
+export function decodeSlug(slug: string) {
+  try {
+    return decodeURIComponent(slug)
+  } catch {
+    return slug
+  }
+}
+
 export function formatDate(date: string) {
   return new Date(date).toLocaleDateString('en-IN', {
     year: 'numeric',
