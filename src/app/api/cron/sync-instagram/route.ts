@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { getWriteClient } from '@sanity/lib/writeClient'
-import { groq } from 'next-sanity'
+import groq from 'groq'
 
 const INSTAGRAM_GRAPH_URL = 'https://graph.instagram.com'
 const MEDIA_FIELDS = 'id,caption,media_type,media_url,timestamp,permalink'

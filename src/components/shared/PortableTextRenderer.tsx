@@ -1,5 +1,5 @@
-import { PortableText, type PortableTextComponents } from 'next-sanity'
-import type { PortableTextBlock } from 'next-sanity'
+import { PortableText, type PortableTextComponents } from '@portabletext/react'
+import type { PortableTextBlock } from '@portabletext/types'
 import Image from 'next/image'
 import { urlFor } from '@sanity/lib/image'
 
