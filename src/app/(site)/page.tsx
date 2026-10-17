@@ -75,8 +75,8 @@ export default async function HomePage() {
       {services.length > 0 && (
         <ServicesList
           services={services}
-          title="What We Do"
-          subtitle="Comprehensive design and construction solutions."
+          title="Services"
+          subtitle="From architecture and interior design to complete construction, we take your project from the first sketch to the final handover."
         />
       )}
 

@@ -122,7 +122,7 @@ export default async function ServiceDetailPage({ params }: Props) {
       {/* Back */}
       <section className="py-10 text-center">
         <Container>
-          <Button href="/services" variant="outline">
+          <Button href="/#services" variant="outline">
             ← Back to Services
           </Button>
         </Container>

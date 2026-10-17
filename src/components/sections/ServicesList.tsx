@@ -21,7 +21,7 @@ export function ServicesList({
   const cityBuildersServices = services.filter((s) => s.brand === 'cityBuilders' || s.brand === 'both')
 
   return (
-    <section className="py-[var(--section-padding)]">
+    <section id="services" className="py-[var(--section-padding)] scroll-mt-20">
       <Container>
         <SectionHeading title={title} subtitle={subtitle} label="What We Do" />
 
