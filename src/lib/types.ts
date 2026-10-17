@@ -149,6 +149,32 @@ export interface Homepage {
   ctaDescription?: string
 }
 
+export interface BrandPhilosophy {
+  description?: string
+  points?: string[]
+}
+
+export interface AboutPage {
+  _id: string
+  _type: 'aboutPage'
+  heroLabel?: string
+  heroHeadline?: string
+  heroIntro?: string
+  storyHeadline?: string
+  storyBody?: string
+  storyImage?: SanityImage
+  philosophyLabel?: string
+  philosophyTitle?: string
+  philosophySubtitle?: string
+  designamicsPhilosophy?: BrandPhilosophy
+  cityBuildersPhilosophy?: BrandPhilosophy
+  teamLabel?: string
+  teamTitle?: string
+  teamSubtitle?: string
+  teamButtonLabel?: string
+  seo?: SeoData
+}
+
 export interface ContactInfo {
   _id: string
   _type: 'contactInfo'

@@ -39,6 +39,29 @@ export const homepageQuery = groq`
   }
 `
 
+// ─── About Page ───
+export const aboutPageQuery = groq`
+  *[_type == "aboutPage"][0] {
+    _id,
+    heroLabel,
+    heroHeadline,
+    heroIntro,
+    storyHeadline,
+    storyBody,
+    storyImage,
+    philosophyLabel,
+    philosophyTitle,
+    philosophySubtitle,
+    designamicsPhilosophy,
+    cityBuildersPhilosophy,
+    teamLabel,
+    teamTitle,
+    teamSubtitle,
+    teamButtonLabel,
+    seo
+  }
+`
+
 // ─── Contact Info ───
 export const contactInfoQuery = groq`
   *[_type == "contactInfo"][0] {

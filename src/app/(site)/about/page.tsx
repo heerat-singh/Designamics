@@ -2,23 +2,111 @@ import type { Metadata } from 'next'
 import { Container, SectionHeading, Button } from '@/components/ui'
 import { ScrollReveal, FadeIn } from '@/components/motion'
 import { sanityFetch } from '@sanity/lib/fetch'
-import { allTeamQuery } from '@sanity/lib/queries'
+import { aboutPageQuery, allTeamQuery } from '@sanity/lib/queries'
+import { urlFor } from '@sanity/lib/image'
 import { SanityImage, BrandIndicator } from '@/components/shared'
 import { BRANDS } from '@/lib/constants'
-import type { TeamMember } from '@/lib/types'
+import type { AboutPage, TeamMember } from '@/lib/types'
 
-export const metadata: Metadata = {
-  title: 'About Us',
-  description: 'Learn about Designamics and City Builders — two brands united by a passion for creating extraordinary spaces in Ludhiana, Punjab.',
+// Shown until the About Page document is published in Sanity
+const DEFAULTS = {
+  heroLabel: 'Our Story',
+  heroHeadline: 'Two Brands, One Vision',
+  heroIntro:
+    'Born from a shared belief that great spaces transform lives, Designamics and City Builders bring together the art of interior design and the science of construction under one roof.',
+  storyHeadline: 'From Ludhiana, for Ludhiana — and beyond.',
+  storyBody:
+    "What started as a passion for creating beautiful living spaces has grown into a comprehensive design and construction practice. We don't just design interiors or build structures — we craft experiences that families and businesses live in every day.\n\nOur dual-brand approach means clients get the best of both worlds: the creative vision of an interior design studio with the structural expertise of an engineering firm. Every project benefits from this integrated perspective.",
+  philosophyLabel: 'What Drives Us',
+  philosophyTitle: 'Our Philosophy',
+  philosophySubtitle: 'Two distinct approaches, unified by excellence.',
+  designamicsPhilosophy: {
+    description:
+      'We believe interiors should tell a story — your story. Every material, every texture, every color is chosen with intention to create spaces that feel both luxurious and genuinely yours. Our approach blends contemporary aesthetics with warmth and functionality.',
+    points: [
+      'Residential Interior Design',
+      'Commercial Space Design',
+      'Furniture & Fixture Curation',
+      'Turnkey Interior Solutions',
+    ],
+  },
+  cityBuildersPhilosophy: {
+    description:
+      "Construction isn't just about bricks and mortar — it's about building trust. Every structure we create is engineered for longevity, built with precision, and delivered with transparency. We bring your architectural vision to structural reality.",
+    points: [
+      'Residential Construction',
+      'Commercial Building',
+      'Renovation & Remodeling',
+      'Project Management',
+    ],
+  },
+  teamLabel: 'Leadership',
+  teamTitle: 'The People Behind It All',
+  teamSubtitle: 'Meet the founders driving our vision forward.',
+  teamButtonLabel: 'Meet the Full Team',
+  metaTitle: 'About Us',
+  metaDescription:
+    'Learn about Designamics and City Builders — two brands united by a passion for creating extraordinary spaces in Ludhiana, Punjab.',
+}
+
+function getAboutPage() {
+  return sanityFetch<AboutPage | null>({
+    query: aboutPageQuery,
+    tags: ['aboutPage'],
+  })
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const about = await getAboutPage()
+  const ogImage = about?.seo?.ogImage?.asset ? about.seo.ogImage : about?.storyImage
+
+  return {
+    title: about?.seo?.metaTitle || DEFAULTS.metaTitle,
+    description: about?.seo?.metaDescription || DEFAULTS.metaDescription,
+    openGraph: ogImage?.asset
+      ? { images: [{ url: urlFor(ogImage).width(1200).height(630).url() }] }
+      : undefined,
+  }
 }
 
 export default async function AboutPage() {
-  const team = await sanityFetch<TeamMember[]>({
-    query: allTeamQuery,
-    tags: ['teamMember'],
-  })
+  const [about, team] = await Promise.all([
+    getAboutPage(),
+    sanityFetch<TeamMember[]>({
+      query: allTeamQuery,
+      tags: ['teamMember'],
+    }),
+  ])
 
   const founders = team.filter((m) => m.isFounder).slice(0, 4)
+
+  const storyParagraphs = (about?.storyBody || DEFAULTS.storyBody)
+    .split(/\n\s*\n/)
+    .map((p) => p.trim())
+    .filter(Boolean)
+
+  const philosophies = [
+    {
+      key: 'designamics',
+      brand: BRANDS.designamics,
+      content: about?.designamicsPhilosophy,
+      fallback: DEFAULTS.designamicsPhilosophy,
+      cardClass: 'bg-designamics-bg border-designamics/20',
+      accentClass: 'bg-designamics',
+      textClass: 'text-designamics-dark',
+      taglineClass: 'text-designamics-dark/70',
+    },
+    {
+      key: 'cityBuilders',
+      brand: BRANDS.cityBuilders,
+      content: about?.cityBuildersPhilosophy,
+      fallback: DEFAULTS.cityBuildersPhilosophy,
+      cardClass: 'bg-citybuilders-bg border-citybuilders/20',
+      accentClass: 'bg-citybuilders',
+      textClass: 'text-citybuilders-dark',
+      taglineClass: 'text-citybuilders-dark/70',
+    },
+  ]
 
   return (
     <>
@@ -27,14 +115,13 @@ export default async function AboutPage() {
         <Container className="max-w-4xl text-center">
           <FadeIn>
             <p className="font-display text-sm font-medium tracking-[0.3em] uppercase text-accent mb-6">
-              Our Story
+              {about?.heroLabel || DEFAULTS.heroLabel}
             </p>
             <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
-              Two Brands, One Vision
+              {about?.heroHeadline || DEFAULTS.heroHeadline}
             </h1>
             <p className="mt-6 text-lg md:text-xl text-muted leading-relaxed max-w-2xl mx-auto">
-              Born from a shared belief that great spaces transform lives, Designamics and City Builders
-              bring together the art of interior design and the science of construction under one roof.
+              {about?.heroIntro || DEFAULTS.heroIntro}
             </p>
           </FadeIn>
         </Container>
@@ -47,25 +134,28 @@ export default async function AboutPage() {
             <ScrollReveal direction="left">
               <div className="space-y-6">
                 <h2 className="font-display text-3xl md:text-4xl font-semibold">
-                  From Ludhiana, for Ludhiana — and beyond.
+                  {about?.storyHeadline || DEFAULTS.storyHeadline}
                 </h2>
-                <p className="text-muted leading-relaxed">
-                  What started as a passion for creating beautiful living spaces has grown into a
-                  comprehensive design and construction practice. We don't just design interiors or
-                  build structures — we craft experiences that families and businesses live in every day.
-                </p>
-                <p className="text-muted leading-relaxed">
-                  Our dual-brand approach means clients get the best of both worlds: the creative
-                  vision of an interior design studio with the structural expertise of an engineering firm.
-                  Every project benefits from this integrated perspective.
-                </p>
+                {storyParagraphs.map((paragraph, i) => (
+                  <p key={i} className="text-muted leading-relaxed">
+                    {paragraph}
+                  </p>
+                ))}
               </div>
             </ScrollReveal>
             <ScrollReveal direction="right" delay={0.2}>
               <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-foreground/5">
-                <div className="absolute inset-0 flex items-center justify-center text-muted/30 font-display text-xl">
-                  About Image
-                </div>
+                {about?.storyImage?.asset ? (
+                  <SanityImage
+                    image={about.storyImage}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                  />
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center text-muted/30 font-display text-xl">
+                    About Image
+                  </div>
+                )}
               </div>
             </ScrollReveal>
           </div>
@@ -76,57 +166,38 @@ export default async function AboutPage() {
       <section className="py-[var(--section-padding)]">
         <Container>
           <SectionHeading
-            title="Our Philosophy"
-            subtitle="Two distinct approaches, unified by excellence."
-            label="What Drives Us"
+            title={about?.philosophyTitle || DEFAULTS.philosophyTitle}
+            subtitle={about?.philosophySubtitle || DEFAULTS.philosophySubtitle}
+            label={about?.philosophyLabel || DEFAULTS.philosophyLabel}
           />
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <ScrollReveal>
-              <div className="p-8 md:p-10 rounded-2xl bg-designamics-bg border border-designamics/20">
-                <div className="w-12 h-0.5 bg-designamics mb-6" />
-                <h3 className="font-display text-2xl font-semibold mb-2 text-designamics-dark">
-                  {BRANDS.designamics.name}
-                </h3>
-                <p className="font-serif text-lg italic text-designamics-dark/70 mb-6">
-                  &ldquo;{BRANDS.designamics.tagline}&rdquo;
-                </p>
-                <p className="text-muted leading-relaxed mb-4">
-                  We believe interiors should tell a story — your story. Every material, every texture,
-                  every color is chosen with intention to create spaces that feel both luxurious and
-                  genuinely yours. Our approach blends contemporary aesthetics with warmth and functionality.
-                </p>
-                <ul className="space-y-2 text-sm text-muted">
-                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 bg-designamics rounded-full" /> Residential Interior Design</li>
-                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 bg-designamics rounded-full" /> Commercial Space Design</li>
-                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 bg-designamics rounded-full" /> Furniture & Fixture Curation</li>
-                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 bg-designamics rounded-full" /> Turnkey Interior Solutions</li>
-                </ul>
-              </div>
-            </ScrollReveal>
-
-            <ScrollReveal delay={0.15}>
-              <div className="p-8 md:p-10 rounded-2xl bg-citybuilders-bg border border-citybuilders/20">
-                <div className="w-12 h-0.5 bg-citybuilders mb-6" />
-                <h3 className="font-display text-2xl font-semibold mb-2 text-citybuilders-dark">
-                  {BRANDS.cityBuilders.name}
-                </h3>
-                <p className="font-serif text-lg italic text-citybuilders-dark/70 mb-6">
-                  &ldquo;{BRANDS.cityBuilders.tagline}&rdquo;
-                </p>
-                <p className="text-muted leading-relaxed mb-4">
-                  Construction isn't just about bricks and mortar — it's about building trust.
-                  Every structure we create is engineered for longevity, built with precision, and
-                  delivered with transparency. We bring your architectural vision to structural reality.
-                </p>
-                <ul className="space-y-2 text-sm text-muted">
-                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 bg-citybuilders rounded-full" /> Residential Construction</li>
-                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 bg-citybuilders rounded-full" /> Commercial Building</li>
-                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 bg-citybuilders rounded-full" /> Renovation & Remodeling</li>
-                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 bg-citybuilders rounded-full" /> Project Management</li>
-                </ul>
-              </div>
-            </ScrollReveal>
+            {philosophies.map((p, i) => {
+              const points = p.content?.points?.length ? p.content.points : p.fallback.points
+              return (
+                <ScrollReveal key={p.key} delay={i * 0.15}>
+                  <div className={`p-8 md:p-10 rounded-2xl border ${p.cardClass}`}>
+                    <div className={`w-12 h-0.5 mb-6 ${p.accentClass}`} />
+                    <h3 className={`font-display text-2xl font-semibold mb-2 ${p.textClass}`}>
+                      {p.brand.name}
+                    </h3>
+                    <p className={`font-serif text-lg italic mb-6 ${p.taglineClass}`}>
+                      &ldquo;{p.brand.tagline}&rdquo;
+                    </p>
+                    <p className="text-muted leading-relaxed mb-4">
+                      {p.content?.description || p.fallback.description}
+                    </p>
+                    <ul className="space-y-2 text-sm text-muted">
+                      {points.map((point) => (
+                        <li key={point} className="flex items-center gap-2">
+                          <span className={`w-1.5 h-1.5 rounded-full ${p.accentClass}`} /> {point}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </ScrollReveal>
+              )
+            })}
           </div>
         </Container>
       </section>
@@ -136,9 +207,9 @@ export default async function AboutPage() {
         <section className="py-[var(--section-padding)] bg-foreground/[0.02]">
           <Container>
             <SectionHeading
-              title="The People Behind It All"
-              subtitle="Meet the founders driving our vision forward."
-              label="Leadership"
+              title={about?.teamTitle || DEFAULTS.teamTitle}
+              subtitle={about?.teamSubtitle || DEFAULTS.teamSubtitle}
+              label={about?.teamLabel || DEFAULTS.teamLabel}
             />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
               {founders.map((member, i) => (
@@ -158,7 +229,7 @@ export default async function AboutPage() {
             </div>
             <div className="text-center mt-10">
               <Button href="/team" variant="outline">
-                Meet the Full Team
+                {about?.teamButtonLabel || DEFAULTS.teamButtonLabel}
               </Button>
             </div>
           </Container>
