@@ -49,7 +49,7 @@ export function HeroSection({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="font-display text-sm font-medium tracking-[0.3em] uppercase text-designamics mb-6"
+            className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold uppercase text-designamics leading-[1.1] tracking-tight mb-6"
           >
             Designamics & City Builders
           </motion.p>
@@ -58,7 +58,7 @@ export function HeroSection({
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.1] tracking-tight"
+            className="font-display text-sm font-medium tracking-wide text-white"
           >
             {headline}
           </motion.h1>
