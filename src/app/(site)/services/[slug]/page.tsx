@@ -3,10 +3,10 @@ import { notFound } from 'next/navigation'
 import { sanityFetch } from '@sanity/lib/fetch'
 import { serviceBySlugQuery, serviceSlugsQuery } from '@sanity/lib/queries'
 import { urlFor } from '@sanity/lib/image'
-import { Container, Badge, Button } from '@/components/ui'
+import { Container, Button } from '@/components/ui'
 import { SanityImage, PortableTextRenderer } from '@/components/shared'
 import { FadeIn, ScrollReveal } from '@/components/motion'
-import { decodeSlug, getBrandLabel } from '@/lib/utils'
+import { decodeSlug } from '@/lib/utils'
 import type { Service } from '@/lib/types'
 
 interface Props {
@@ -60,9 +60,6 @@ export default async function ServiceDetailPage({ params }: Props) {
       <section className="py-[var(--section-padding)] bg-foreground/[0.02]">
         <Container className="max-w-4xl">
           <FadeIn>
-            <Badge brand={service.brand} size="md" className="mb-4">
-              {getBrandLabel(service.brand)}
-            </Badge>
             <h1 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
               {service.icon && <span className="mr-3">{service.icon}</span>}
               {service.title}

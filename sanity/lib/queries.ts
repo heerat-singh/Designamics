@@ -157,11 +157,10 @@ export const projectSlugsQuery = groq`
 
 // ─── Services ───
 export const allServicesQuery = groq`
-  *[_type == "service"] | order(sortOrder asc) {
+  *[_type == "service" && defined(slug.current)] | order(sortOrder asc, title asc) {
     _id,
     title,
     slug,
-    brand,
     shortDescription,
     icon,
     image,
@@ -174,7 +173,6 @@ export const serviceBySlugQuery = groq`
     _id,
     title,
     slug,
-    brand,
     shortDescription,
     fullDescription,
     icon,

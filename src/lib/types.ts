@@ -72,7 +72,6 @@ export interface Service {
   _type: 'service'
   title: string
   slug: { current: string }
-  brand: Brand
   shortDescription: string
   fullDescription?: PortableTextBlock[]
   icon?: string
