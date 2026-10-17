@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Container } from '@/components/ui'
@@ -40,13 +41,15 @@ export function Navbar() {
         <Container>
           <nav className="flex items-center justify-between h-20">
             {/* Logo */}
-            <Link href="/" className="relative z-10">
-              <span className="font-display text-xl font-bold tracking-tight">
-                <span className="text-designamics">Design</span>
-                <span className="text-foreground">amics</span>
-                <span className="text-muted mx-1.5 font-light">&</span>
-                <span className="text-citybuilders">City Builders</span>
-              </span>
+            <Link href="/" className="relative z-10 block">
+              <Image
+                src="/logo.png"
+                alt="Designamics & City Builders"
+                width={976}
+                height={450}
+                priority
+                className="h-16 w-auto"
+              />
             </Link>
 
             {/* Desktop Navigation */}
