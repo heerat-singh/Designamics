@@ -8,8 +8,6 @@ interface FormData {
   email: string
   phone: string
   service: string
-  brand: string
-  budget: string
   message: string
 }
 
@@ -18,8 +16,6 @@ const initialState: FormData = {
   email: '',
   phone: '',
   service: '',
-  brand: '',
-  budget: '',
   message: '',
 }
 
@@ -108,41 +104,6 @@ export function ContactForm() {
           className="w-full px-4 py-3 rounded-lg border border-border bg-white text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition"
           placeholder="+91 98765 43210"
         />
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-        <div>
-          <label htmlFor="brand" className="block text-sm font-medium mb-1.5">Interested In</label>
-          <select
-            id="brand"
-            name="brand"
-            value={formData.brand}
-            onChange={handleChange}
-            className="w-full px-4 py-3 rounded-lg border border-border bg-white text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition"
-          >
-            <option value="">Select brand</option>
-            <option value="designamics">Interior Design (Designamics)</option>
-            <option value="cityBuilders">Construction (City Builders)</option>
-            <option value="both">Both Services</option>
-          </select>
-        </div>
-        <div>
-          <label htmlFor="budget" className="block text-sm font-medium mb-1.5">Budget Range</label>
-          <select
-            id="budget"
-            name="budget"
-            value={formData.budget}
-            onChange={handleChange}
-            className="w-full px-4 py-3 rounded-lg border border-border bg-white text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition"
-          >
-            <option value="">Select range</option>
-            <option value="under-5L">Under 5 Lakh</option>
-            <option value="5L-15L">5 - 15 Lakh</option>
-            <option value="15L-50L">15 - 50 Lakh</option>
-            <option value="50L-1Cr">50 Lakh - 1 Crore</option>
-            <option value="above-1Cr">Above 1 Crore</option>
-          </select>
-        </div>
       </div>
 
       <div>
